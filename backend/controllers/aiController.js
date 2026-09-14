@@ -18,18 +18,52 @@ const assessHealth = async (req, res) => {
             process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
         const prompt = `
-You are a health information assistant.
+You are a professional health information assistant.
 
-Analyze the symptoms provided by the user and give a preliminary health assessment.
+Analyze the user's symptoms and provide a preliminary health assessment.
 
-IMPORTANT:
-- Do NOT provide a definitive medical diagnosis.
-- Clearly state that the response is informational only.
-- Mention possible common conditions or causes only as possibilities.
-- Provide general self-care guidance when appropriate.
-- Mention warning signs that require medical attention.
-- Recommend consulting a qualified healthcare professional when appropriate.
-- Keep the response clear and easy to understand.
+This is an educational and informational tool, NOT a medical diagnosis.
+
+Return ONLY valid JSON using exactly this structure:
+
+{
+    "summary": "A short, clear summary of the symptoms.",
+    "possibleCauses": [
+        "Possible cause 1",
+        "Possible cause 2",
+        "Possible cause 3"
+    ],
+    "severity": "Mild",
+    "severityExplanation": "Short explanation of why this severity level was selected.",
+    "generalCare": [
+        "General self-care recommendation 1",
+        "General self-care recommendation 2",
+        "General self-care recommendation 3"
+    ],
+    "warningSigns": [
+        "Warning sign 1",
+        "Warning sign 2"
+    ],
+    "whenToSeeDoctor": "Explain when the user should consult a healthcare professional.",
+    "disclaimer": "This AI-generated assessment is for informational purposes only and is not a medical diagnosis."
+}
+
+Rules:
+
+1. Never provide a definitive diagnosis.
+2. Possible causes must be presented only as possibilities.
+3. Severity must be exactly one of:
+   - Mild
+   - Moderate
+   - Urgent
+4. Do not prescribe prescription medication.
+5. Do not recommend specific prescription drug dosages.
+6. Provide only general self-care information.
+7. Include important warning signs when relevant.
+8. Recommend professional medical care when appropriate.
+9. Keep the language simple and easy to understand.
+10. Do not include Markdown.
+11. Return ONLY the JSON object. Do not add any text before or after the JSON.
 
 User symptoms:
 ${symptoms}
@@ -41,7 +75,8 @@ ${symptoms}
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "x-goog-api-key": process.env.GEMINI_API_KEY
+                    "x-goog-api-key":
+                        process.env.GEMINI_API_KEY
                 },
                 body: JSON.stringify({
                     model: model,
@@ -62,7 +97,7 @@ ${symptoms}
             });
         }
 
-        let assessment = "";
+        let text = "";
 
         if (Array.isArray(data.steps)) {
             for (const step of data.steps) {
@@ -75,16 +110,39 @@ ${symptoms}
                             content.type === "text" &&
                             content.text
                         ) {
-                            assessment += content.text;
+                            text += content.text;
                         }
                     }
                 }
             }
         }
 
-        if (!assessment) {
+        if (!text) {
             return res.status(500).json({
                 message: "AI returned an empty response."
+            });
+        }
+
+        // Remove accidental markdown code fences
+        text = text
+            .replace(/^```json\s*/i, "")
+            .replace(/^```\s*/i, "")
+            .replace(/\s*```$/i, "")
+            .trim();
+
+        let assessment;
+
+        try {
+            assessment = JSON.parse(text);
+        } catch (error) {
+            console.error(
+                "Failed to parse AI JSON:",
+                text
+            );
+
+            return res.status(500).json({
+                message:
+                    "AI returned an invalid assessment format."
             });
         }
 
@@ -93,7 +151,10 @@ ${symptoms}
         });
 
     } catch (error) {
-        console.error("AI assessment error:", error);
+        console.error(
+            "AI assessment error:",
+            error
+        );
 
         res.status(500).json({
             message:

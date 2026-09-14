@@ -208,3 +208,317 @@ body {
         padding: 25px;
     }
 }
+/* =========================================
+   AI HEALTH ASSESSMENT
+========================================= */
+
+.ai-assessment {
+    margin-top: 24px;
+    margin-bottom: 30px;
+}
+
+
+/* Header */
+
+.ai-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    padding: 24px;
+
+    background: linear-gradient(
+        135deg,
+        #f5f7ff,
+        #ffffff
+    );
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px 16px 0 0;
+}
+
+
+.ai-header-icon {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eef2ff;
+
+    font-size: 25px;
+}
+
+
+.ai-header h2 {
+    margin: 0 0 5px;
+
+    font-size: 22px;
+}
+
+
+.ai-header p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 14px;
+}
+
+
+/* Sections */
+
+.ai-section {
+    padding: 24px;
+
+    background: #ffffff;
+
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+
+.ai-section-title {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+
+.ai-section-title h3 {
+    margin: 0;
+
+    font-size: 17px;
+}
+
+
+.section-icon {
+    font-size: 20px;
+}
+
+
+.ai-summary {
+    margin: 0;
+
+    line-height: 1.7;
+
+    color: #374151;
+
+    font-size: 15px;
+}
+
+
+/* Lists */
+
+.ai-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.ai-list-item {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 10px;
+
+    padding: 11px 14px;
+
+    background: #f9fafb;
+
+    border-radius: 9px;
+
+    color: #374151;
+
+    line-height: 1.5;
+
+    font-size: 14px;
+}
+
+
+.bullet {
+    font-weight: bold;
+
+    font-size: 18px;
+
+    line-height: 20px;
+}
+
+
+/* Severity */
+
+.severity-row {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+
+.severity-badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 7px 16px;
+
+    border-radius: 999px;
+
+    font-size: 13px;
+
+    font-weight: 700;
+}
+
+
+.severity-mild {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.severity-moderate {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.severity-urgent {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.severity-text {
+    color: #4b5563;
+
+    font-size: 14px;
+
+    line-height: 1.5;
+}
+
+
+/* Warning */
+
+.warning-section {
+    background: #fffdf7;
+}
+
+
+.warning-intro {
+    margin-top: 0;
+
+    margin-bottom: 14px;
+
+    color: #92400e;
+
+    font-size: 14px;
+}
+
+
+.warning-list .ai-list-item {
+    background: #fff7ed;
+}
+
+
+/* Doctor */
+
+.doctor-section {
+    background: #f8fafc;
+}
+
+
+.doctor-section p {
+    margin: 0;
+
+    color: #374151;
+
+    line-height: 1.7;
+
+    font-size: 14px;
+}
+
+
+/* Disclaimer */
+
+.ai-disclaimer {
+    padding: 20px 24px;
+
+    background: #f3f4f6;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 0 0 16px 16px;
+}
+
+
+.ai-disclaimer strong {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+}
+
+
+.ai-disclaimer p {
+    margin: 0;
+
+    color: #6b7280;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .ai-header {
+        padding: 18px;
+    }
+
+
+    .ai-section {
+        padding: 18px;
+    }
+
+
+    .ai-disclaimer {
+        padding: 18px;
+    }
+
+
+    .ai-header h2 {
+        font-size: 19px;
+    }
+
+
+    .severity-row {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+}
