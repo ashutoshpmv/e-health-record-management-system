@@ -15,7 +15,7 @@ const assessHealth = async (req, res) => {
         }
 
         const model =
-            process.env.GEMINI_MODEL || "gemini-2.5-flash";
+            process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
         const prompt = `
 You are a health information assistant.
@@ -25,7 +25,7 @@ Analyze the symptoms provided by the user and give a preliminary health assessme
 IMPORTANT:
 - Do NOT provide a definitive medical diagnosis.
 - Clearly state that the response is informational only.
-- Mention possible common conditions or causes as possibilities.
+- Mention possible common conditions or causes only as possibilities.
 - Provide general self-care guidance when appropriate.
 - Mention warning signs that require medical attention.
 - Recommend consulting a qualified healthcare professional when appropriate.
@@ -36,22 +36,16 @@ ${symptoms}
 `;
 
         const response = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${process.env.GEMINI_API_KEY}`,
+            "https://generativelanguage.googleapis.com/v1beta/interactions",
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "x-goog-api-key": process.env.GEMINI_API_KEY
                 },
                 body: JSON.stringify({
-                    contents: [
-                        {
-                            parts: [
-                                {
-                                    text: prompt
-                                }
-                            ]
-                        }
-                    ]
+                    model: model,
+                    input: prompt
                 })
             }
         );
@@ -68,8 +62,25 @@ ${symptoms}
             });
         }
 
-        const assessment =
-            data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        let assessment = "";
+
+        if (Array.isArray(data.steps)) {
+            for (const step of data.steps) {
+                if (
+                    step.type === "model_output" &&
+                    Array.isArray(step.content)
+                ) {
+                    for (const content of step.content) {
+                        if (
+                            content.type === "text" &&
+                            content.text
+                        ) {
+                            assessment += content.text;
+                        }
+                    }
+                }
+            }
+        }
 
         if (!assessment) {
             return res.status(500).json({
