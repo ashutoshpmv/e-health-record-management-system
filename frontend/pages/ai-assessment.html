@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AI Health Assessment</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="container navbar-content">
+
+            <div class="logo">
+                E-Health Records
+            </div>
+
+            <div class="nav-links">
+
+                <a
+                    href="patient-dashboard.html"
+                >
+                    Dashboard
+                </a>
+
+                <a
+                    href="#"
+                    id="logout"
+                >
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+        <div class="form-card">
+
+            <h1>
+                AI Preliminary Health Assessment
+            </h1>
+
+            <p>
+                Describe your symptoms below and the AI
+                will provide a preliminary health assessment.
+            </p>
+
+            <div class="message" id="message"></div>
+
+            <form id="aiForm">
+
+                <label for="symptoms">
+                    Describe your symptoms
+                </label>
+
+                <textarea
+                    id="symptoms"
+                    rows="8"
+                    placeholder="Example: I have fever, cough and sore throat for the last two days..."
+                    required
+                ></textarea>
+
+                <button
+                    type="submit"
+                    class="btn"
+                >
+                    Get AI Assessment
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <div id="result"></div>
+
+
+        <div class="card">
+
+            <h3>Important Notice</h3>
+
+            <p>
+                This tool provides an AI-generated
+                preliminary health assessment for
+                informational purposes only.
+            </p>
+
+            <p>
+                It is not a medical diagnosis and should
+                not replace advice from a qualified
+                healthcare professional.
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <script src="../js/api.js"></script>
+    <script src="../js/ai.js"></script>
+
+</body>
+
+</html>
