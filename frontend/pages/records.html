@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Medical Records - E-Health Records</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="container navbar-content">
+
+            <div class="logo">
+                E-Health Records
+            </div>
+
+            <div class="nav-links">
+
+                <a
+                    href="#"
+                    id="dashboardLink"
+                >
+                    Dashboard
+                </a>
+
+                <a href="profile.html">
+                    Profile
+                </a>
+
+                <button
+                    id="logoutButton"
+                    class="btn"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard">
+
+        <div class="container">
+
+            <div class="dashboard-header">
+
+                <h1>
+                    Medical Records
+                </h1>
+
+                <p id="pageDescription">
+                    View your medical history.
+                </p>
+
+            </div>
+
+
+            <!-- ADD RECORD - DOCTOR ONLY -->
+
+            <div
+                id="addRecordSection"
+                class="card"
+                style="display: none; margin-bottom: 25px;"
+            >
+
+                <h2 style="margin-bottom: 20px;">
+                    Add Medical Record
+                </h2>
+
+                <div
+                    id="recordMessage"
+                    class="message"
+                ></div>
+
+
+                <form id="recordForm">
+
+                    <div class="form-group">
+
+                        <label for="patientId">
+                            Select Patient
+                        </label>
+
+                        <select
+                            id="patientId"
+                            required
+                        >
+
+                            <option value="">
+                                Loading patients...
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="symptoms">
+                            Symptoms
+                        </label>
+
+                        <textarea
+                            id="symptoms"
+                            placeholder="Describe patient's symptoms"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="diagnosis">
+                            Diagnosis
+                        </label>
+
+                        <textarea
+                            id="diagnosis"
+                            placeholder="Enter diagnosis"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="medications">
+                            Medications
+                        </label>
+
+                        <textarea
+                            id="medications"
+                            placeholder="Enter prescribed medications"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="notes">
+                            Doctor Notes
+                        </label>
+
+                        <textarea
+                            id="notes"
+                            placeholder="Additional notes"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="visitDate">
+                            Visit Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="visitDate"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Add Medical Record
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- EDIT RECORD - DOCTOR ONLY -->
+
+            <div
+                id="editRecordSection"
+                class="card"
+                style="display: none; margin-bottom: 25px;"
+            >
+
+                <h2 style="margin-bottom: 20px;">
+                    Edit Medical Record
+                </h2>
+
+                <div
+                    id="editMessage"
+                    class="message"
+                ></div>
+
+
+                <form id="editRecordForm">
+
+                    <div class="form-group">
+
+                        <label for="editSymptoms">
+                            Symptoms
+                        </label>
+
+                        <textarea
+                            id="editSymptoms"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editDiagnosis">
+                            Diagnosis
+                        </label>
+
+                        <textarea
+                            id="editDiagnosis"
+                            required
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editMedications">
+                            Medications
+                        </label>
+
+                        <textarea
+                            id="editMedications"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editNotes">
+                            Doctor Notes
+                        </label>
+
+                        <textarea
+                            id="editNotes"
+                        ></textarea>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="editVisitDate">
+                            Visit Date
+                        </label>
+
+                        <input
+                            type="date"
+                            id="editVisitDate"
+                        >
+
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn"
+                    >
+                        Update Record
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelEditButton"
+                        class="btn btn-secondary"
+                        style="margin-top: 10px;"
+                    >
+                        Cancel
+                    </button>
+
+                </form>
+
+            </div>
+
+
+            <!-- RECORDS -->
+
+            <div id="recordsContainer">
+
+                <div class="card">
+
+                    <p>
+                        Loading medical records...
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+
+    <script src="../js/api.js"></script>
+    <script src="../js/records.js"></script>
+
+</body>
+
+</html>

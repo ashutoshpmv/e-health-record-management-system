@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Doctor Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="container navbar-content">
+
+            <div class="logo">
+                E-Health Records
+            </div>
+
+            <div class="nav-links">
+
+                <a href="profile.html">
+                    Profile
+                </a>
+
+                <a href="records.html">
+                    Medical Records
+                </a>
+
+                <button
+                    id="logoutButton"
+                    class="btn"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- DASHBOARD -->
+
+    <main class="dashboard">
+
+        <div class="container">
+
+            <div class="dashboard-header">
+
+                <h1>
+                    Welcome, Dr.
+                    <span id="userName">
+                        Doctor
+                    </span>
+                </h1>
+
+                <p>
+                    Role:
+                    <strong id="userRole">
+                        Doctor
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <!-- CARDS -->
+
+            <div class="card-grid">
+
+                <div class="card">
+
+                    <h3>
+                        My Profile
+                    </h3>
+
+                    <p>
+                        Name:
+                        <strong id="profileName">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <p>
+                        Email:
+                        <strong id="profileEmail">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <p>
+                        Phone:
+                        <strong id="profilePhone">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="profile.html"
+                        class="btn"
+                    >
+                        View Profile
+                    </a>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Medical Records
+                    </h3>
+
+                    <p>
+                        Records Created:
+                        <strong id="recordCount">
+                            0
+                        </strong>
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="records.html"
+                        class="btn"
+                    >
+                        Manage Records
+                    </a>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Patient Management
+                    </h3>
+
+                    <p>
+                        Create and manage
+                        medical records
+                        for your patients.
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="records.html"
+                        class="btn"
+                    >
+                        Manage Patients
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="../js/api.js"></script>
+
+    <script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>

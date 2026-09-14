@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Patient Dashboard</title>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css"
+    >
+
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="container navbar-content">
+
+            <div class="logo">
+                E-Health Records
+            </div>
+
+            <div class="nav-links">
+
+                <a href="profile.html">
+                    Profile
+                </a>
+
+                <a href="records.html">
+                    Medical Records
+                </a>
+
+                <button
+                    id="logoutButton"
+                    class="btn"
+                    type="button"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </nav>
+
+
+    <!-- DASHBOARD -->
+
+    <main class="dashboard">
+
+        <div class="container">
+
+            <div class="dashboard-header">
+
+                <h1>
+                    Welcome,
+                    <span id="userName">
+                        Patient
+                    </span>
+                </h1>
+
+                <p>
+                    Role:
+                    <strong id="userRole">
+                        Patient
+                    </strong>
+                </p>
+
+            </div>
+
+
+            <!-- CARDS -->
+
+            <div class="card-grid">
+
+                <div class="card">
+
+                    <h3>
+                        My Profile
+                    </h3>
+
+                    <p>
+                        Name:
+                        <strong id="profileName">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <p>
+                        Email:
+                        <strong id="profileEmail">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <p>
+                        Phone:
+                        <strong id="profilePhone">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <p>
+                        Blood Group:
+                        <strong id="profileBloodGroup">
+                            Loading...
+                        </strong>
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="profile.html"
+                        class="btn"
+                    >
+                        View Profile
+                    </a>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        Medical Records
+                    </h3>
+
+                    <p>
+                        Total Records:
+                        <strong id="recordCount">
+                            0
+                        </strong>
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="records.html"
+                        class="btn"
+                    >
+                        View Records
+                    </a>
+
+                </div>
+
+
+                <div class="card">
+
+                    <h3>
+                        AI Health Assessment
+                    </h3>
+
+                    <p>
+                        Get a preliminary
+                        health assessment
+                        based on your symptoms.
+                    </p>
+
+                    <br>
+
+                    <a
+                        href="ai-assessment.html"
+                        class="btn"
+                    >
+                        Start Assessment
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="../js/api.js"></script>
+
+    <script src="../js/dashboard.js"></script>
+
+</body>
+
+</html>
