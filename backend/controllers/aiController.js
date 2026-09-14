@@ -18,59 +18,48 @@ const assessHealth = async (req, res) => {
             process.env.GEMINI_MODEL || "gemini-3.6-flash";
 
         const prompt = `
-You are a professional health information assistant.
+You are a helpful health information assistant.
 
-Analyze the user's symptoms and provide a preliminary health assessment.
+Analyze the symptoms provided by the user and give a clear preliminary health assessment.
 
-This is an educational and informational tool, NOT a medical diagnosis.
+IMPORTANT:
+- This is NOT a medical diagnosis.
+- Do not provide a definitive diagnosis.
+- Mention possible causes only as possibilities.
+- Give general self-care guidance when appropriate.
+- Clearly mention warning signs that require urgent medical attention.
+- Recommend consulting a qualified healthcare professional when appropriate.
+- Keep the response practical, clear and easy to understand.
 
-Return ONLY valid JSON using exactly this structure:
+Use the following structure:
 
-{
-    "summary": "A short, clear summary of the symptoms.",
-    "possibleCauses": [
-        "Possible cause 1",
-        "Possible cause 2",
-        "Possible cause 3"
-    ],
-    "severity": "Mild",
-    "severityExplanation": "Short explanation of why this severity level was selected.",
-    "generalCare": [
-        "General self-care recommendation 1",
-        "General self-care recommendation 2",
-        "General self-care recommendation 3"
-    ],
-    "warningSigns": [
-        "Warning sign 1",
-        "Warning sign 2"
-    ],
-    "whenToSeeDoctor": "Explain when the user should consult a healthcare professional.",
-    "disclaimer": "This AI-generated assessment is for informational purposes only and is not a medical diagnosis."
-}
+SUMMARY
+Give a short summary of what the symptoms may indicate.
 
-Rules:
+POSSIBLE CAUSES
+List 2-4 possible common causes or conditions.
 
-1. Never provide a definitive diagnosis.
-2. Possible causes must be presented only as possibilities.
-3. Severity must be exactly one of:
-   - Mild
-   - Moderate
-   - Urgent
-4. Do not prescribe prescription medication.
-5. Do not recommend specific prescription drug dosages.
-6. Provide only general self-care information.
-7. Include important warning signs when relevant.
-8. Recommend professional medical care when appropriate.
-9. Keep the language simple and easy to understand.
-10. Do not include Markdown.
-11. Return ONLY the JSON object. Do not add any text before or after the JSON.
+SEVERITY
+Classify the situation as Mild, Moderate, or Urgent and explain why.
+
+GENERAL CARE
+Give useful general self-care recommendations.
+
+WARNING SIGNS
+List symptoms that mean the person should seek urgent medical attention.
+
+WHEN TO SEE A DOCTOR
+Explain when the user should consult a healthcare professional.
+
+IMPORTANT NOTICE
+Clearly state that this is AI-generated information and not a medical diagnosis.
 
 User symptoms:
 ${symptoms}
 `;
 
         const response = await fetch(
-            "https://generativelanguage.googleapis.com/v1beta/interactions",
+            `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`,
             {
                 method: "POST",
                 headers: {
@@ -79,8 +68,15 @@ ${symptoms}
                         process.env.GEMINI_API_KEY
                 },
                 body: JSON.stringify({
-                    model: model,
-                    input: prompt
+                    contents: [
+                        {
+                            parts: [
+                                {
+                                    text: prompt
+                                }
+                            ]
+                        }
+                    ]
                 })
             }
         );
@@ -97,52 +93,12 @@ ${symptoms}
             });
         }
 
-        let text = "";
+        const assessment =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
-        if (Array.isArray(data.steps)) {
-            for (const step of data.steps) {
-                if (
-                    step.type === "model_output" &&
-                    Array.isArray(step.content)
-                ) {
-                    for (const content of step.content) {
-                        if (
-                            content.type === "text" &&
-                            content.text
-                        ) {
-                            text += content.text;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!text) {
+        if (!assessment) {
             return res.status(500).json({
                 message: "AI returned an empty response."
-            });
-        }
-
-        // Remove accidental markdown code fences
-        text = text
-            .replace(/^```json\s*/i, "")
-            .replace(/^```\s*/i, "")
-            .replace(/\s*```$/i, "")
-            .trim();
-
-        let assessment;
-
-        try {
-            assessment = JSON.parse(text);
-        } catch (error) {
-            console.error(
-                "Failed to parse AI JSON:",
-                text
-            );
-
-            return res.status(500).json({
-                message:
-                    "AI returned an invalid assessment format."
             });
         }
 

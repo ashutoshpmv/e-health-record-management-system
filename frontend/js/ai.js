@@ -14,400 +14,345 @@ if (!token || !user) {
 
 if (aiForm) {
 
-    aiForm.addEventListener(
-        "submit",
-        async (event) => {
+    aiForm.addEventListener("submit", async (event) => {
 
-            event.preventDefault();
+        event.preventDefault();
 
-            const symptoms =
-                document
-                    .getElementById("symptoms")
-                    .value
-                    .trim();
+        const symptoms =
+            document
+                .getElementById("symptoms")
+                .value
+                .trim();
 
-            if (!symptoms) {
+        if (!symptoms) {
 
-                message.className =
-                    "message error";
+            message.className =
+                "message error";
 
-                message.textContent =
-                    "Please describe your symptoms.";
+            message.textContent =
+                "Please describe your symptoms.";
 
-                return;
-            }
+            return;
+        }
+
+
+        message.className = "message";
+
+        message.textContent =
+            "Generating preliminary assessment...";
+
+        resultContainer.innerHTML = "";
+
+
+        try {
+
+            const data =
+                await apiRequest(
+                    "/ai/assessment",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+                            symptoms
+                        })
+                    }
+                );
 
 
             message.className =
-                "message";
+                "message success";
 
             message.textContent =
-                "Generating your preliminary health assessment...";
-
-            resultContainer.innerHTML = "";
+                "Assessment generated successfully.";
 
 
-            try {
+            resultContainer.innerHTML = `
+                <div class="ai-assessment">
 
-                const data =
-                    await apiRequest(
-                        "/ai/assessment",
-                        {
-                            method: "POST",
+                    <div class="ai-header">
 
-                            body: JSON.stringify({
-                                symptoms
-                            })
-                        }
-                    );
+                        <div class="ai-header-icon">
+                            ✨
+                        </div>
 
+                        <div>
+                            <h2>
+                                AI Preliminary Health Assessment
+                            </h2>
 
-                message.className =
-                    "message success";
+                            <p>
+                                AI-generated informational assessment
+                            </p>
+                        </div>
 
-                message.textContent =
-                    "Assessment generated successfully.";
-
-
-                resultContainer.innerHTML =
-                    createAssessmentHTML(
-                        data.assessment
-                    );
+                    </div>
 
 
-            } catch (error) {
+                    <div class="ai-result-content">
 
-                message.className =
-                    "message error";
+                        ${formatAssessment(
+                            data.assessment
+                        )}
 
-                message.textContent =
-                    error.message;
-            }
+                    </div>
+
+
+                    <div class="ai-disclaimer">
+
+                        <strong>
+                            ⚠️ Important Notice
+                        </strong>
+
+                        <p>
+                            This AI-generated assessment is for
+                            informational purposes only and is
+                            not a medical diagnosis. It should
+                            not replace advice from a qualified
+                            healthcare professional.
+                        </p>
+
+                    </div>
+
+                </div>
+            `;
+
+        } catch (error) {
+
+            message.className =
+                "message error";
+
+            message.textContent =
+                error.message;
         }
-    );
+
+    });
+
 }
 
 
 /*
-    Create the complete assessment UI
+    Format AI response
 */
 
-function createAssessmentHTML(
-    assessment
-) {
-
-    const severityClass =
-        getSeverityClass(
-            assessment.severity
-        );
-
-
-    return `
-
-        <div class="ai-assessment">
-
-            <!-- Header -->
-
-            <div class="ai-header">
-
-                <div class="ai-header-icon">
-                    ✨
-                </div>
-
-                <div>
-
-                    <h2>
-                        AI Preliminary Health Assessment
-                    </h2>
-
-                    <p>
-                        AI-generated informational assessment
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <!-- Summary -->
-
-            <div class="ai-section">
-
-                <div class="ai-section-title">
-                    <span class="section-icon">
-                        🩺
-                    </span>
-
-                    <h3>
-                        Health Summary
-                    </h3>
-                </div>
-
-                <p class="ai-summary">
-                    ${escapeHTML(
-                        assessment.summary
-                    )}
-                </p>
-
-            </div>
-
-
-            <!-- Possible Causes -->
-
-            <div class="ai-section">
-
-                <div class="ai-section-title">
-
-                    <span class="section-icon">
-                        🔎
-                    </span>
-
-                    <h3>
-                        Possible Causes
-                    </h3>
-
-                </div>
-
-
-                <div class="ai-list">
-
-                    ${createList(
-                        assessment.possibleCauses
-                    )}
-
-                </div>
-
-            </div>
-
-
-            <!-- Severity -->
-
-            <div class="ai-section">
-
-                <div class="ai-section-title">
-
-                    <span class="section-icon">
-                        📊
-                    </span>
-
-                    <h3>
-                        Severity
-                    </h3>
-
-                </div>
-
-
-                <div class="severity-row">
-
-                    <span
-                        class="severity-badge ${severityClass}"
-                    >
-                        ${escapeHTML(
-                            assessment.severity
-                        )}
-                    </span>
-
-                    <span class="severity-text">
-
-                        ${escapeHTML(
-                            assessment.severityExplanation
-                        )}
-
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- General Care -->
-
-            <div class="ai-section">
-
-                <div class="ai-section-title">
-
-                    <span class="section-icon">
-                        💡
-                    </span>
-
-                    <h3>
-                        General Care
-                    </h3>
-
-                </div>
-
-
-                <div class="ai-list">
-
-                    ${createList(
-                        assessment.generalCare
-                    )}
-
-                </div>
-
-            </div>
-
-
-            <!-- Warning Signs -->
-
-            <div class="ai-section warning-section">
-
-                <div class="ai-section-title">
-
-                    <span class="section-icon">
-                        ⚠️
-                    </span>
-
-                    <h3>
-                        Warning Signs
-                    </h3>
-
-                </div>
-
-
-                <p class="warning-intro">
-                    Seek prompt medical attention if you
-                    experience any of the following:
-                </p>
-
-
-                <div class="ai-list warning-list">
-
-                    ${createList(
-                        assessment.warningSigns
-                    )}
-
-                </div>
-
-            </div>
-
-
-            <!-- Doctor -->
-
-            <div class="ai-section doctor-section">
-
-                <div class="ai-section-title">
-
-                    <span class="section-icon">
-                        👨‍⚕️
-                    </span>
-
-                    <h3>
-                        When to See a Doctor
-                    </h3>
-
-                </div>
-
-
-                <p>
-                    ${escapeHTML(
-                        assessment.whenToSeeDoctor
-                    )}
-                </p>
-
-            </div>
-
-
-            <!-- Disclaimer -->
-
-            <div class="ai-disclaimer">
-
-                <strong>
-                    ⚠️ Important Notice
-                </strong>
-
-                <p>
-                    ${escapeHTML(
-                        assessment.disclaimer
-                    )}
-                </p>
-
-            </div>
-
-        </div>
-    `;
-}
-
-
-/*
-    Convert arrays into bullet lists
-*/
-
-function createList(items) {
+function formatAssessment(text) {
 
     if (
-        !Array.isArray(items) ||
-        items.length === 0
+        typeof text !== "string"
     ) {
-
         return `
             <p>
-                No specific information available.
+                Unable to format the AI response.
             </p>
         `;
     }
 
 
-    return items
-        .map(
-            (item) => `
-                <div class="ai-list-item">
+    let formatted =
+        escapeHTML(text);
 
-                    <span class="bullet">
-                        •
-                    </span>
 
-                    <span>
-                        ${escapeHTML(item)}
-                    </span>
+    const sections = [
+        {
+            title: "SUMMARY",
+            icon: "🩺"
+        },
+        {
+            title: "POSSIBLE CAUSES",
+            icon: "🔎"
+        },
+        {
+            title: "SEVERITY",
+            icon: "📊"
+        },
+        {
+            title: "GENERAL CARE",
+            icon: "💡"
+        },
+        {
+            title: "WARNING SIGNS",
+            icon: "⚠️"
+        },
+        {
+            title: "WHEN TO SEE A DOCTOR",
+            icon: "👨‍⚕️"
+        },
+        {
+            title: "IMPORTANT NOTICE",
+            icon: "📌"
+        }
+    ];
 
-                </div>
-            `
-        )
-        .join("");
+
+    sections.forEach(
+        (section) => {
+
+            const regex =
+                new RegExp(
+                    section.title,
+                    "gi"
+                );
+
+            formatted =
+                formatted.replace(
+                    regex,
+                    `|||${section.icon} ${section.title}|||`
+                );
+        }
+    );
+
+
+    const parts =
+        formatted.split("|||");
+
+
+    let html = "";
+
+
+    parts.forEach(
+        (part) => {
+
+            part = part.trim();
+
+            if (!part) {
+                return;
+            }
+
+
+            const matchingSection =
+                sections.find(
+                    (section) =>
+                        part.startsWith(
+                            `${section.icon} ${section.title}`
+                        )
+                );
+
+
+            if (matchingSection) {
+
+                const title =
+                    `${matchingSection.icon} ${matchingSection.title}`;
+
+                const content =
+                    part
+                        .substring(title.length)
+                        .trim();
+
+
+                html += `
+                    <div class="ai-section">
+
+                        <div class="ai-section-title">
+
+                            <h3>
+                                ${title}
+                            </h3>
+
+                        </div>
+
+                        <div class="ai-section-content">
+
+                            ${formatText(
+                                content
+                            )}
+
+                        </div>
+
+                    </div>
+                `;
+
+            } else {
+
+                html += `
+                    <div class="ai-section">
+
+                        <div class="ai-section-content">
+
+                            ${formatText(
+                                part
+                            )}
+
+                        </div>
+
+                    </div>
+                `;
+            }
+
+        }
+    );
+
+
+    return html;
 }
 
 
 /*
-    Severity badge styling
+    Format paragraphs and bullet points
 */
 
-function getSeverityClass(
-    severity
-) {
+function formatText(text) {
 
-    switch (
-        String(severity).toLowerCase()
-    ) {
+    const lines =
+        text
+            .split("\n")
+            .map(
+                line => line.trim()
+            )
+            .filter(
+                line => line.length > 0
+            );
 
-        case "mild":
-            return "severity-mild";
 
-        case "moderate":
-            return "severity-moderate";
+    let html = "";
 
-        case "urgent":
-            return "severity-urgent";
 
-        default:
-            return "severity-moderate";
-    }
+    lines.forEach(
+        (line) => {
+
+            if (
+                line.startsWith("- ") ||
+                line.startsWith("• ")
+            ) {
+
+                const item =
+                    line.substring(2);
+
+                html += `
+                    <div class="ai-list-item">
+
+                        <span class="bullet">
+                            •
+                        </span>
+
+                        <span>
+                            ${item}
+                        </span>
+
+                    </div>
+                `;
+
+            } else {
+
+                html += `
+                    <p>
+                        ${line}
+                    </p>
+                `;
+            }
+
+        }
+    );
+
+
+    return html;
 }
 
 
 /*
-    Prevent HTML injection from AI output
+    Security:
+    Escape HTML returned by AI
 */
 
 function escapeHTML(value) {
-
-    if (
-        value === undefined ||
-        value === null
-    ) {
-        return "";
-    }
-
 
     return String(value)
         .replace(/&/g, "&amp;")
@@ -433,13 +378,8 @@ if (logout) {
 
             event.preventDefault();
 
-            localStorage.removeItem(
-                "token"
-            );
-
-            localStorage.removeItem(
-                "user"
-            );
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
 
             window.location.href =
                 "login.html";

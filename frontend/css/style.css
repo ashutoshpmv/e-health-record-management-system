@@ -522,3 +522,35 @@ body {
         flex-direction: column;
     }
 }
+.ai-result-content {
+    background: #ffffff;
+    border-left: 1px solid #e5e7eb;
+    border-right: 1px solid #e5e7eb;
+}
+
+.ai-result-content .ai-section {
+    border: none;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.ai-section-content {
+    color: #374151;
+    line-height: 1.7;
+    font-size: 15px;
+}
+
+.ai-section-content p {
+    margin: 0 0 10px;
+}
+
+.ai-section-content p:last-child {
+    margin-bottom: 0;
+}
+
+.ai-list-item {
+    margin-bottom: 8px;
+}
+
+.ai-list-item:last-child {
+    margin-bottom: 0;
+}
